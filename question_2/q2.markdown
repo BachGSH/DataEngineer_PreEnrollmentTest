@@ -1,0 +1,38 @@
+# Question 2
+
+To structure a databasse schema to store address information for customers with the condition of their addresses might change over time, I have come up with these 3 schema design:
+
+## Option 1: Overwriting
+Schema:
+    - Customers(customer_id, name, address, city, state, zipcode)
+Pros:
+    - It is simple to apply and understand the schema
+    - Easy to manage and retreieve the current address as all of the information is kept in a single table.
+Cons:
+    - Previous addresses' historical data will be lost, which might be essential for auditing, reporting or understanding customers' behaviors
+    - Difficult in monitoring how many frequently customers change their addresses within a period of time
+
+## Option 2: Split Customers & Addresses into two tables which the relation of One-to-many (one customer can have many addresses)
+Schema:
+    - Customers(cusomer_id, name)
+    - Addresses(address_id, customer_id, address, city, state, zipcode)
+Pros: 
+    - Keep tracks of complete historical data of addresses, which might be crucial for auditing, reporting or understanding customers' behaviors
+    - Easy to monitor the freqency of changing from customers
+Cons:
+    - Complexity in database management and retrieving data (writing queries will require join in this case)
+    - If many customers have the same address, it might create the redundancy
+
+## Option 3: Normalize the Addresses table. Customers and Addresses will have the relation of Many-to-many (a new entity will be created named CustomerAddress)
+Schema:
+    - Customer(customer_id, name)
+    - Addresses(address_id, address, city, state, zipcode)
+    - CustomerAddress(address_id, customer_id, begin_date, end_date)
+Pros: 
+    - With normalization, we can avoid redundancy
+    - Keep tracks of complete historical data of addresses, which might be crucial for auditing, reporting or understanding customers' behaviors
+Cons:
+    - More complex schema and queries, especially for retrieving the current address.
+    - Slow performance due to many joins required when querying data
+
+
